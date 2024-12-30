@@ -127,20 +127,20 @@ function sessionSwitch() {
 
 // Music Integration
 function loadMusic(url, autoplay = false) {
-  if (url && url.includes('youtube.com')) {
-    if (currentVideoURL !== url) {
-      musicPlayer.innerHTML = `
-        <iframe width="100%" height="200" 
-          src="${url.replace('watch?v=', 'embed/')}${autoplay ? '?autoplay=1' : ''}" 
-          frameborder="0" allow="autoplay; encrypted-media" 
-          allowfullscreen>
-        </iframe>`;
-      currentVideoURL = url;
-    }
-  } else if (!url) {
-    console.warn('No YouTube URL provided. Skipping video load.');
+  if (url.includes('youtube.com')) {
+    // Construct the embed URL with autoplay and mute parameters
+    const embedUrl = url.replace('watch?v=', 'embed/') + (autoplay ? '?autoplay=1&mute=1' : '');
+    musicPlayer.innerHTML = `
+      <iframe width="100%" height="200"
+        src="${embedUrl}"
+        frameborder="0" allow="autoplay; encrypted-media"
+        allowfullscreen>
+      </iframe>`;
+  } else {
+    alert('Please enter a valid YouTube Music URL');
   }
 }
+
 
 // Set Custom Durations with Decimal Support
 function setCustomDurations() {

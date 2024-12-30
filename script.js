@@ -115,17 +115,17 @@ function loadMusic(url, autoplay = false) {
   }
 }
 
-// Set Custom Durations
+// Set Custom Durations with Decimal Support
 function setCustomDurations() {
-  const workInputValue = parseInt(workInput.value, 10);
-  const breakInputValue = parseInt(breakInput.value, 10);
+  const workInputValue = parseFloat(workInput.value); // Parse as float
+  const breakInputValue = parseFloat(breakInput.value); // Parse as float
 
   if (!isNaN(workInputValue) && workInputValue > 0) {
-    workDuration = workInputValue * 60;
+    workDuration = Math.round(workInputValue * 60); // Convert to seconds (support decimals)
   }
 
   if (!isNaN(breakInputValue) && breakInputValue > 0) {
-    breakDuration = breakInputValue * 60;
+    breakDuration = Math.round(breakInputValue * 60); // Convert to seconds (support decimals)
   }
 
   resetTimer();

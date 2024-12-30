@@ -10,6 +10,7 @@ let timer;
 let workVideoURL = '';
 let breakVideoURL = '';
 let useSameVideo = false;
+let currentVideoURL = ''; // Tracks the currently loaded video URL
 
 // DOM Elements
 const timerDisplay = document.getElementById('timer');
@@ -41,21 +42,36 @@ function startTimer() {
   if (isRunning) return;
   isRunning = true;
 
-  // Auto-play the video
-  if (isWorkSession) {
-    loadMusic(workVideoURL, true);
+  // Auto-play the video only if it's not already playing
+  if (useSameVideo) {
+    if (currentVideoURL !== workVideoURL && workVideoURL) {
+      loadMusic(workVideoURL, true);
+      currentVideoURL = workVideoURL;
+    }
   } else {
-    loadMusic(breakVideoURL, true);
+    if (isWorkSession) {
+      loadMusic(workVideoURL, true);
+      currentVideoURL = workVideoURL;
+    } else {
+      loadMusic(breakVideoURL, true);
+      currentVideoURL = breakVideoURL;
+    }
   }
 
   timer = setInterval(() => {
-    if (isWorkSession && timeLeft === 5 * 60 && workDuration > 5 * 60) {
-      // Play warning only if work session is more than 5 minutes
+    if (
+      isWorkSession && 
+      timeLeft === 5 * 60 && 
+      workDuration > 5 * 60
+    ) {
       break_will_start.play();
     }
 
-    if (!isWorkSession && timeLeft === 60 && breakDuration > 60) {
-      // Play warning only if break session is more than 1 minute
+    if (
+      !isWorkSession && 
+      timeLeft === 60 && 
+      breakDuration > 60
+    ) {
       work_will_start.play();
     }
 
@@ -77,6 +93,7 @@ function resetTimer() {
   timeLeft = workDuration;
   updateTimerDisplay();
   loadMusic(workVideoURL); // Reset to original work music
+  currentVideoURL = workVideoURL;
 }
 
 function sessionSwitch() {
@@ -89,6 +106,7 @@ function sessionSwitch() {
 
     if (!useSameVideo && breakVideoURL) {
       loadMusic(breakVideoURL, true);
+      currentVideoURL = breakVideoURL;
     }
   } else {
     // Switch back to work session
@@ -96,7 +114,11 @@ function sessionSwitch() {
     timeLeft = workDuration;
 
     work_has_started.play(); // Work starts
-    loadMusic(workVideoURL, true);
+
+    if (!useSameVideo && workVideoURL) {
+      loadMusic(workVideoURL, true);
+      currentVideoURL = workVideoURL;
+    }
   }
 
   updateTimerDisplay();
@@ -105,15 +127,18 @@ function sessionSwitch() {
 
 // Music Integration
 function loadMusic(url, autoplay = false) {
-  if (url.includes('youtube.com')) {
-    musicPlayer.innerHTML = `
-      <iframe width="100%" height="200" 
-        src="${url.replace('watch?v=', 'embed/')}${autoplay ? '?autoplay=1' : ''}" 
-        frameborder="0" allow="autoplay; encrypted-media" 
-        allowfullscreen>
-      </iframe>`;
-  } else {
-    alert('Please enter a valid YouTube Music URL');
+  if (url && url.includes('youtube.com')) {
+    if (currentVideoURL !== url) {
+      musicPlayer.innerHTML = `
+        <iframe width="100%" height="200" 
+          src="${url.replace('watch?v=', 'embed/')}${autoplay ? '?autoplay=1' : ''}" 
+          frameborder="0" allow="autoplay; encrypted-media" 
+          allowfullscreen>
+        </iframe>`;
+      currentVideoURL = url;
+    }
+  } else if (!url) {
+    console.warn('No YouTube URL provided. Skipping video load.');
   }
 }
 
@@ -153,6 +178,7 @@ sameVideoCheckbox.addEventListener('change', (e) => {
   useSameVideo = e.target.checked;
   if (useSameVideo) {
     breakVideoURL = workVideoURL;
+    currentVideoURL = workVideoURL; // Prevent reload
   }
 });
 

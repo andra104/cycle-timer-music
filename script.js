@@ -137,27 +137,16 @@ function sessionSwitch() {
 }
 
 // Music Integration
-function loadMusic(url, autoplay = true) {
+function loadMusic(url) {
   if (url.includes('youtube.com')) {
-    // Construct the embed URL with autoplay (no mute parameter)
-    const embedUrl = url.replace('watch?v=', 'embed/') + (autoplay ? '?autoplay=1' : '');
+    // Load the video without autoplay
+    const embedUrl = url.replace('watch?v=', 'embed/');
     musicPlayer.innerHTML = `
       <iframe id="videoPlayer" width="100%" height="200"
         src="${embedUrl}"
         frameborder="0" allow="autoplay; encrypted-media"
         allowfullscreen>
       </iframe>`;
-    
-    // Explicitly trigger play using YouTube's IFrame API after a short delay
-    setTimeout(() => {
-      const iframe = document.getElementById('videoPlayer');
-      if (iframe && iframe.contentWindow) {
-        iframe.contentWindow.postMessage(
-          '{"event":"command","func":"playVideo","args":""}',
-          '*'
-        );
-      }
-    }, 500); // Ensure iframe is fully loaded before triggering playback
   } else {
     console.warn('Invalid or empty YouTube URL detected. Video load skipped.');
   }

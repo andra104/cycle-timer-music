@@ -8,11 +8,16 @@
 </head>
 <body>
   <div class="container">
-    <h1>Pomodoro Timer</h1>
+    <h1>Cycle Timer</h1>
     <div id="timer">25:00</div>
     <button id="start">Start</button>
     <button id="reset">Reset</button>
-    <h2>Background Music</h2>
+    <h2>Custom Timer Durations</h2>
+    <label>Work Duration (minutes):</label>
+    <input type="number" id="work-duration" placeholder="25">
+    <label>Break Duration (minutes):</label>
+    <input type="number" id="break-duration" placeholder="5">
+    <h3>Background Music</h2>
     <input type="text" id="music-url" placeholder="Enter YouTube Music URL">
     <button id="load-music">Load Music</button>
     <div id="music-player"></div>
@@ -20,3 +25,5 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+

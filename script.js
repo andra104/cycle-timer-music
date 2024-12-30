@@ -49,12 +49,14 @@ function startTimer() {
   }
 
   timer = setInterval(() => {
-    if (isWorkSession && timeLeft === 5 * 60) {
-      break_will_start.play(); // 5 minutes before work ends
+    if (isWorkSession && timeLeft === 5 * 60 && workDuration > 5 * 60) {
+      // Play warning only if work session is more than 5 minutes
+      break_will_start.play();
     }
 
-    if (!isWorkSession && timeLeft === 60) {
-      work_will_start.play(); // 1 minute before break ends
+    if (!isWorkSession && timeLeft === 60 && breakDuration > 60) {
+      // Play warning only if break session is more than 1 minute
+      work_will_start.play();
     }
 
     if (timeLeft > 0) {
@@ -121,11 +123,11 @@ function setCustomDurations() {
   const breakInputValue = parseFloat(breakInput.value); // Parse as float
 
   if (!isNaN(workInputValue) && workInputValue > 0) {
-    workDuration = Math.round(workInputValue * 60); // Convert to seconds (support decimals)
+    workDuration = Math.round(workInputValue * 60); // Convert to seconds
   }
 
   if (!isNaN(breakInputValue) && breakInputValue > 0) {
-    breakDuration = Math.round(breakInputValue * 60); // Convert to seconds (support decimals)
+    breakDuration = Math.round(breakInputValue * 60); // Convert to seconds
   }
 
   resetTimer();

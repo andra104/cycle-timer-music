@@ -126,7 +126,7 @@ function sessionSwitch() {
 }
 
 // Music Integration
-function loadMusic(url, autoplay = false) {
+function loadMusic(url, autoplay = true) {
   if (url.includes('youtube.com')) {
     // Construct the embed URL with autoplay and mute parameters
     const embedUrl = url.replace('watch?v=', 'embed/') + (autoplay ? '?autoplay=1&mute=1' : '');

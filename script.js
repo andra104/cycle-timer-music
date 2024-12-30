@@ -41,17 +41,20 @@ function startTimer() {
   if (isRunning) return;
   isRunning = true;
 
+  // Auto-play the video
+  if (isWorkSession) {
+    loadMusic(workVideoURL, true);
+  } else {
+    loadMusic(breakVideoURL, true);
+  }
+
   timer = setInterval(() => {
-    if (isWorkSession) {
-      if (timeLeft === 5 * 60) {
-        // 5 minutes before work ends
-        break_will_start.play();
-      }
-    } else {
-      if (timeLeft === 60) {
-        // 1 minute before break ends
-        work_will_start.play();
-      }
+    if (isWorkSession && timeLeft === 5 * 60) {
+      break_will_start.play(); // 5 minutes before work ends
+    }
+
+    if (!isWorkSession && timeLeft === 60) {
+      work_will_start.play(); // 1 minute before break ends
     }
 
     if (timeLeft > 0) {
@@ -80,21 +83,18 @@ function sessionSwitch() {
     isWorkSession = false;
     timeLeft = breakDuration;
 
-    // Play break start sound
-    break_has_started.play();
+    break_has_started.play(); // Break starts
 
     if (!useSameVideo && breakVideoURL) {
-      loadMusic(breakVideoURL); // Switch to break video
+      loadMusic(breakVideoURL, true);
     }
   } else {
     // Switch back to work session
     isWorkSession = true;
     timeLeft = workDuration;
 
-    // Play work start sound
-    work_has_started.play();
-
-    loadMusic(workVideoURL); // Resume work video
+    work_has_started.play(); // Work starts
+    loadMusic(workVideoURL, true);
   }
 
   updateTimerDisplay();
@@ -102,11 +102,11 @@ function sessionSwitch() {
 }
 
 // Music Integration
-function loadMusic(url) {
+function loadMusic(url, autoplay = false) {
   if (url.includes('youtube.com')) {
     musicPlayer.innerHTML = `
       <iframe width="100%" height="200" 
-        src="${url.replace('watch?v=', 'embed/')}" 
+        src="${url.replace('watch?v=', 'embed/')}${autoplay ? '?autoplay=1' : ''}" 
         frameborder="0" allow="autoplay; encrypted-media" 
         allowfullscreen>
       </iframe>`;

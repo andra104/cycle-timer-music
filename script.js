@@ -42,21 +42,32 @@ function startTimer() {
   if (isRunning) return;
   isRunning = true;
 
-  // Auto-play the video only if it's not already playing
+  // Auto-play the video explicitly on timer start
   if (useSameVideo) {
     if (currentVideoURL !== workVideoURL && workVideoURL) {
-      loadMusic(workVideoURL, true);
+      loadMusic(workVideoURL);
       currentVideoURL = workVideoURL;
     }
   } else {
     if (isWorkSession) {
-      loadMusic(workVideoURL, true);
+      loadMusic(workVideoURL);
       currentVideoURL = workVideoURL;
     } else {
-      loadMusic(breakVideoURL, true);
+      loadMusic(breakVideoURL);
       currentVideoURL = breakVideoURL;
     }
   }
+
+  // Explicitly play the video
+  setTimeout(() => {
+    const iframe = document.getElementById('videoPlayer');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage(
+        '{"event":"command","func":"playVideo","args":""}',
+        '*'
+      );
+    }
+  }, 500); // Ensure iframe is fully loaded before triggering playback
 
   timer = setInterval(() => {
     if (

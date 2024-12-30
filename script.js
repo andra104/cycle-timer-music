@@ -128,18 +128,29 @@ function sessionSwitch() {
 // Music Integration
 function loadMusic(url, autoplay = true) {
   if (url.includes('youtube.com')) {
-    // Construct the embed URL with autoplay and mute parameters
     const embedUrl = url.replace('watch?v=', 'embed/') + (autoplay ? '?autoplay=1&mute=1' : '');
     musicPlayer.innerHTML = `
-      <iframe width="100%" height="200"
+      <iframe id="videoPlayer" width="100%" height="200"
         src="${embedUrl}"
         frameborder="0" allow="autoplay; encrypted-media"
         allowfullscreen>
       </iframe>`;
+    
+    // Explicitly trigger play using YouTube's IFrame API
+    setTimeout(() => {
+      const iframe = document.getElementById('videoPlayer');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage(
+          '{"event":"command","func":"playVideo","args":""}',
+          '*'
+        );
+      }
+    }, 500); // Small delay to ensure iframe is fully loaded
   } else {
-    alert('Please enter a valid YouTube Music URL');
+    console.warn('Invalid or empty YouTube URL detected. Video load skipped.');
   }
 }
+
 
 
 // Set Custom Durations with Decimal Support

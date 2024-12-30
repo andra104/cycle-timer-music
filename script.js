@@ -25,10 +25,10 @@ const workInput = document.getElementById('work-duration');
 const breakInput = document.getElementById('break-duration');
 
 // Notification Sounds
-const break_will_start = new Audio('break_will_start.mp3'); // 5 min before work ends
-const break_has_started = new Audio('break_has_started.mp3'); // At break start
-const work_will_start = new Audio('work_will_start.mp3'); // 1 min before break ends
-const work_has_started = new Audio('work_has_started.mp3'); // At work restart
+const break_will_start = new Audio('break_will_start.m4a'); // 5 min before work ends
+const break_has_started = new Audio('break_has_started.m4a'); // At break start
+const work_will_start = new Audio('work_will_start.m4a'); // 1 min before break ends
+const work_has_started = new Audio('work_has_started.m4a'); // At work restart
 
 // Timer Functions
 function updateTimerDisplay() {

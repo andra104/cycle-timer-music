@@ -137,7 +137,7 @@ function loadMusic(url, autoplay = true) {
         allowfullscreen>
       </iframe>`;
     
-    // Explicitly trigger play using YouTube's IFrame API
+    // Explicitly trigger play using YouTube's IFrame API after a short delay
     setTimeout(() => {
       const iframe = document.getElementById('videoPlayer');
       if (iframe && iframe.contentWindow) {
@@ -146,14 +146,11 @@ function loadMusic(url, autoplay = true) {
           '*'
         );
       }
-    }, 500); // Small delay to ensure iframe is fully loaded
+    }, 500); // Ensure iframe is fully loaded before triggering playback
   } else {
     console.warn('Invalid or empty YouTube URL detected. Video load skipped.');
   }
 }
-
-
-
 
 // Set Custom Durations with Decimal Support
 function setCustomDurations() {

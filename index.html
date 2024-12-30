@@ -3,27 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cycle Timer with Music</title>
+  <title>Cycle Timer Music</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Cycle Timer</h1>
+    <h1>Cycle Timer Music</h1>
+    
+    <!-- Timer Display -->
     <div id="timer">25:00</div>
     <button id="start">Start</button>
     <button id="reset">Reset</button>
+    
+    <!-- Custom Timer Durations -->
     <h2>Custom Timer Durations</h2>
-    <label>Work Duration (minutes):</label>
+    <label for="work-duration">Work Duration (minutes):</label>
     <input type="number" id="work-duration" placeholder="25">
-    <label>Break Duration (minutes):</label>
+    
+    <label for="break-duration">Break Duration (minutes):</label>
     <input type="number" id="break-duration" placeholder="5">
-    <h3>Background Music</h2>
-    <input type="text" id="music-url" placeholder="Enter YouTube Music URL">
-    <button id="load-music">Load Music</button>
+    
+    <!-- Background Music Control -->
+    <h2>Background Music</h2>
+    <label for="work-music-url">Work Session Music URL:</label>
+    <input type="text" id="work-music-url" placeholder="Enter YouTube Music URL">
+    <button id="load-work-music">Load Work Music</button>
+    
+    <label for="break-music-url">Break Session Music URL:</label>
+    <input type="text" id="break-music-url" placeholder="Enter YouTube Music URL">
+    <button id="load-break-music">Load Break Music</button>
+    
+    <label>
+      <input type="checkbox" id="same-video"> Use the Same Video for Both Sessions
+    </label>
+    
+    <!-- Music Player -->
+    <h2>Music Player</h2>
     <div id="music-player"></div>
   </div>
+  
+  <!-- Notification Sounds -->
+  <audio id="break_will_start" src="break_will_start.mp3"></audio>
+  <audio id="break_has_started" src="break_has_started.mp3"></audio>
+  <audio id="work_will_start" src="work_will_start.mp3"></audio>
+  <audio id="work_has_started" src="work_has_started.mp3"></audio>
+  
   <script src="script.js"></script>
 </body>
 </html>
+
 
 

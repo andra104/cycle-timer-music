@@ -1,0 +1,35 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment Files
+.env
+.env.local
+
+# Dependency Directories (if using npm or yarn)
+node_modules/
+
+# Build Files
+dist/
+build/
+
+# Cache
+.cache/
+tmp/
+
+# IDE Files
+.vscode/
+.idea/
+*.iml
+
+# Miscellaneous
+*.log
+*.tmp
+
+# Optional: Ignore generated assets
+assets/*.min.*

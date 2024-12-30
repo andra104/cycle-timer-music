@@ -5,21 +5,30 @@ let timeLeft = workDuration;
 let isWorkSession = true;
 let isRunning = false;
 let timer;
-let originalMusicURL = '';
-let waveMusicURL = 'https://www.youtube.com/embed/your-wave-sounds-video-id'; // Replace with a real wave sound URL
+
+// Video URLs
+let workVideoURL = '';
+let breakVideoURL = '';
+let useSameVideo = false;
 
 // DOM Elements
 const timerDisplay = document.getElementById('timer');
 const startBtn = document.getElementById('start');
 const resetBtn = document.getElementById('reset');
-const loadMusicBtn = document.getElementById('load-music');
-const musicUrlInput = document.getElementById('music-url');
+const loadWorkMusicBtn = document.getElementById('load-work-music');
+const loadBreakMusicBtn = document.getElementById('load-break-music');
+const sameVideoCheckbox = document.getElementById('same-video');
+const workMusicUrlInput = document.getElementById('work-music-url');
+const breakMusicUrlInput = document.getElementById('break-music-url');
 const musicPlayer = document.getElementById('music-player');
-const workInput = document.getElementById('work-duration'); // Add input for work duration in HTML
-const breakInput = document.getElementById('break-duration'); // Add input for break duration in HTML
+const workInput = document.getElementById('work-duration');
+const breakInput = document.getElementById('break-duration');
 
-// Sounds
-const notificationSound = new Audio('notification.mp3'); // Add a notification sound file
+// Notification Sounds
+const break_will_start = new Audio('break_will_start.mp3'); // 5 min before work ends
+const break_has_started = new Audio('break_has_started.mp3'); // At break start
+const work_will_start = new Audio('work_will_start.mp3'); // 1 min before break ends
+const work_has_started = new Audio('work_has_started.mp3'); // At work restart
 
 // Timer Functions
 function updateTimerDisplay() {
@@ -33,6 +42,18 @@ function startTimer() {
   isRunning = true;
 
   timer = setInterval(() => {
+    if (isWorkSession) {
+      if (timeLeft === 5 * 60) {
+        // 5 minutes before work ends
+        break_will_start.play();
+      }
+    } else {
+      if (timeLeft === 60) {
+        // 1 minute before break ends
+        work_will_start.play();
+      }
+    }
+
     if (timeLeft > 0) {
       timeLeft--;
       updateTimerDisplay();
@@ -50,23 +71,30 @@ function resetTimer() {
   isWorkSession = true;
   timeLeft = workDuration;
   updateTimerDisplay();
-  loadMusic(originalMusicURL); // Reset to original music
+  loadMusic(workVideoURL); // Reset to original work music
 }
 
 function sessionSwitch() {
-  // Play notification sound
-  notificationSound.play();
-
   if (isWorkSession) {
     // Switch to break session
     isWorkSession = false;
     timeLeft = breakDuration;
-    loadMusic(waveMusicURL); // Switch to wave sounds
+
+    // Play break start sound
+    break_has_started.play();
+
+    if (!useSameVideo && breakVideoURL) {
+      loadMusic(breakVideoURL); // Switch to break video
+    }
   } else {
     // Switch back to work session
     isWorkSession = true;
     timeLeft = workDuration;
-    loadMusic(originalMusicURL); // Resume original music
+
+    // Play work start sound
+    work_has_started.play();
+
+    loadMusic(workVideoURL); // Resume work video
   }
 
   updateTimerDisplay();
@@ -106,10 +134,26 @@ function setCustomDurations() {
 // Event Listeners
 startBtn.addEventListener('click', startTimer);
 resetBtn.addEventListener('click', resetTimer);
-loadMusicBtn.addEventListener('click', () => {
-  originalMusicURL = musicUrlInput.value;
-  loadMusic(originalMusicURL);
+
+loadWorkMusicBtn.addEventListener('click', () => {
+  workVideoURL = workMusicUrlInput.value;
+  loadMusic(workVideoURL);
 });
+
+loadBreakMusicBtn.addEventListener('click', () => {
+  breakVideoURL = breakMusicUrlInput.value;
+  if (useSameVideo) {
+    breakVideoURL = workVideoURL;
+  }
+});
+
+sameVideoCheckbox.addEventListener('change', (e) => {
+  useSameVideo = e.target.checked;
+  if (useSameVideo) {
+    breakVideoURL = workVideoURL;
+  }
+});
+
 workInput.addEventListener('change', setCustomDurations);
 breakInput.addEventListener('change', setCustomDurations);
 

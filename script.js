@@ -128,7 +128,8 @@ function sessionSwitch() {
 // Music Integration
 function loadMusic(url, autoplay = true) {
   if (url.includes('youtube.com')) {
-    const embedUrl = url.replace('watch?v=', 'embed/') + (autoplay ? '?autoplay=1&mute=1' : '');
+    // Construct the embed URL with autoplay (no mute parameter)
+    const embedUrl = url.replace('watch?v=', 'embed/') + (autoplay ? '?autoplay=1' : '');
     musicPlayer.innerHTML = `
       <iframe id="videoPlayer" width="100%" height="200"
         src="${embedUrl}"
@@ -150,6 +151,7 @@ function loadMusic(url, autoplay = true) {
     console.warn('Invalid or empty YouTube URL detected. Video load skipped.');
   }
 }
+
 
 
 

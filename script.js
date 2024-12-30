@@ -49,19 +49,13 @@ function startTimer() {
   }
 
   timer = setInterval(() => {
-    if (
-      isWorkSession && 
-      timeLeft === 5 * 60 && 
-      workDuration > 5 * 60 // Exclude exactly 5 min or less
-    ) {
+    if (isWorkSession && timeLeft === 5 * 60 && workDuration > 5 * 60) {
+      // Play warning only if work session is more than 5 minutes
       break_will_start.play();
     }
 
-    if (
-      !isWorkSession && 
-      timeLeft === 60 && 
-      breakDuration > 60 // Exclude exactly 1 min or less
-    ) {
+    if (!isWorkSession && timeLeft === 60 && breakDuration > 60) {
+      // Play warning only if break session is more than 1 minute
       work_will_start.play();
     }
 
